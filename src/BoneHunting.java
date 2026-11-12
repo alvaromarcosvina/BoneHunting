@@ -13,14 +13,16 @@ public class BoneHunting {
         final int CURACION_HOGUERA = 30;
         final int MAX_HOGUERAS = 3;        // veces que se puede descansar en toda la partida
         final int DAÑO_CONTRAGOLPE = 15;    // daño que haces al monstruo cuando te defiendes
+        final int RECOMPENSA_BASE = 20;     // recompensa base por monstruo derrotado
 
         // ---------- DATOS DEL CAZADOR ----------
         int vida = VIDA_MAXIMA;
         int pociones = 3;
-        int esquirlas = 50 ;
+        int esquirlas = 50;
         int hogueras = 0;                  // hogueras ya usadas
         int armaEquipada = 0;              // posicion del arma en los arrays de armas
 
+        // Los arrays de cada grupo usan el mismo índice para relacionar sus datos.
         // ---------- ARRAYS DE ARMAS ----------
         String[] armas = {"Dagas dobles", "Espada corta", "Hacha de caza", "Maza con pinchos"};
         int[] dañoArmas = {27, 35, 43, 60};
@@ -28,15 +30,15 @@ public class BoneHunting {
         boolean[] armasCompradas = {true, false, false, false};
 
         // ---------- ARRAYS DE MONSTRUOS ----------
-        String[] monstruos = {"Esqueleto", "Perro de huesos", "Guerrero oseo", "Bestia del osario", "Rey de los huesos"};
+        String[] monstruos = {"Esqueleto", "Perro de huesos", "Guerrero óseo", "Bestia del osario", "Rey de los huesos"};
         int[] vidasMonstruos = {50, 65, 78, 89, 150};
         int[] ataquesMonstruos = {19, 25, 30, 35, 42};
         String[] historias = {
-            "Un soldado caido que aun recuerda como empuñar su lanza.",
+            "Un soldado caído que aún recuerda cómo empuñar su lanza.",
             "Los perros del antiguo cazador, hechos de costillas y rabia.",
             "Un caballero de la guardia, fiel a un rey que ya no existe.",
             "Una masa de huesos fundidos que guarda la entrada al trono.",
-            "El primer cazador de Ossaria. Se corono con los huesos de todos los que lo desafiaron."
+            "El primer cazador de Ossaria. Se coronó con los huesos de todos los que lo desafiaron."
         };
 
         int monstruoActual = 0;
@@ -46,24 +48,24 @@ public class BoneHunting {
         System.out.println("================================");
         System.out.println("          BONEHUNTING");
         System.out.println("================================");
-        System.out.println("Hace siglos, la ciudad de Ossaria enterro a sus muertos");
+        System.out.println("Hace siglos, la ciudad de Ossaria enterró a sus muertos");
         System.out.println("bajo la colina. Una noche sin luna, los huesos despertaron.");
-        System.out.println("Ahora eres el ultimo cazador que se atreve a bajar al osario.");
+        System.out.println("Ahora eres el último cazador que se atreve a bajar al osario.");
         System.out.println("Derrota a los cinco monstruos y acaba con el Rey de los huesos.");
 
-        while (!juegoTerminado) { //menu principal 
+        while (!juegoTerminado) { // Menú principal
             System.out.println("\n--- MENU PRINCIPAL ---");
             System.out.println("1. Cazar un monstruo");
-            System.out.println("2. Usar una pocion");
+            System.out.println("2. Usar una poción");
             System.out.println("3. Ver mis datos");
             System.out.println("4. Ver monstruos pendientes");
             System.out.println("5. Descansar junto a una hoguera (" + (MAX_HOGUERAS - hogueras) + " restantes)");
             System.out.println("6. Tienda");
             System.out.println("7. Cambiar de arma");
             System.out.println("8. Salir del juego");
-            System.out.print("Elige una opcion: ");
+            System.out.print("Elige una opción: ");
 
-            // Leer un numero sin que el programa se rompa si escriben letras.
+            // Comprobar que la opción introducida es un número entero.
             int opcion;
             if (teclado.hasNextInt()) { 
                 opcion = teclado.nextInt();
@@ -88,8 +90,8 @@ public class BoneHunting {
                         System.out.println(monstruos[monstruoActual] + ": " + vidaMonstruo + " de vida");
                         System.out.println("1. Atacar con " + armas[armaEquipada] + " (" + dañoArmas[armaEquipada] + " de daño)");
                         System.out.println("2. Defenderse (recibes la mitad de daño y contraatacas)");
-                        System.out.println("3. Usar pocion");
-                        System.out.print("Elige una accion: ");
+                        System.out.println("3. Usar poción");
+                        System.out.print("Elige una acción: ");
 
                         int accion;
                         if (teclado.hasNextInt()) {
@@ -100,7 +102,7 @@ public class BoneHunting {
                         }
 
                         int dañoRecibido = ataqueMonstruo;
-                        // Si la accion no es valida, no se gasta el turno y el monstruo no ataca
+                        // El turno se considera gastado salvo que la acción no pueda realizarse.
                         boolean turnoGastado = true;
 
                         if (accion == 1) {
@@ -114,28 +116,28 @@ public class BoneHunting {
                         } else if (accion == 3) {
                             if (pociones == 0) {
                                 System.out.println("No te quedan pociones.");
-                                turnoGastado = false;
+                                turnoGastado = false; // Sin pociones, el jugador no pierde el turno.
                             } else if (vida == VIDA_MAXIMA) {
-                                System.out.println("Ya tienes la vida al maximo.");
-                                turnoGastado = false;
+                                System.out.println("Ya tienes la vida al máximo.");
+                                turnoGastado = false; // Con la vida al máximo, tampoco se pierde el turno.
                             } else {
                                 vida = vida + CURACION_POCION;
                                 if (vida > VIDA_MAXIMA) {
                                     vida = VIDA_MAXIMA;
                                 }
                                 pociones--;
-                                System.out.println("Bebes una pocion. Tu vida ahora es " + vida + ".");
+                                System.out.println("Bebes una poción. Tu vida ahora es " + vida + ".");
                             }
                         } else {
                             System.out.println("Accion incorrecta. Elige 1, 2 o 3.");
-                            turnoGastado = false;
+                            turnoGastado = false; // Una acción no válida no consume el turno.
                         }
 
                         if (vidaMonstruo < 0) {
                             vidaMonstruo = 0;
                         }
 
-                        // El monstruo solo ataca si el turno se ha gastado y sigue vivo
+                        // El monstruo solo responde si el jugador gastó el turno y sigue vivo.
                         if (turnoGastado && vidaMonstruo > 0) {
                             vida = vida - dañoRecibido;
                             System.out.println(monstruos[monstruoActual] + " te hace " + dañoRecibido + " de daño.");
@@ -151,7 +153,7 @@ public class BoneHunting {
                         System.out.println("GAME OVER.");
                         juegoTerminado = true;
                     } else {
-                        int recompensa = 20 * (monstruoActual + 1);
+                        int recompensa = RECOMPENSA_BASE * (monstruoActual + 1);
                         esquirlas = esquirlas + recompensa;
                         System.out.println("\nHas derrotado a " + monstruos[monstruoActual] + "!");
                         System.out.println("Consigues " + recompensa + " esquirlas.");
@@ -170,14 +172,14 @@ public class BoneHunting {
                 // ---------- USAR POCION ----------
                 if (pociones > 0) {
                     if (vida == VIDA_MAXIMA) {
-                        System.out.println("Ya tienes la vida al maximo.");
+                        System.out.println("Ya tienes la vida al máximo.");
                     } else {
                         vida = vida + CURACION_POCION;
                         if (vida > VIDA_MAXIMA) {
                             vida = VIDA_MAXIMA;
                         }
                         pociones--;
-                        System.out.println("Usas una pocion. Tu vida ahora es " + vida + ".");
+                        System.out.println("Usas una poción. Tu vida ahora es " + vida + ".");
                         System.out.println("Pociones restantes: " + pociones);
                     }
                 } else {
@@ -212,7 +214,7 @@ public class BoneHunting {
                 if (hogueras >= MAX_HOGUERAS) {
                     System.out.println("Ya no quedan hogueras encendidas en el osario.");
                 } else if (vida == VIDA_MAXIMA) {
-                    System.out.println("Estas en plena forma, no necesitas descansar.");
+                    System.out.println("Estás en plena forma, no necesitas descansar.");
                 } else {
                     int vidaAnterior = vida;
                     vida = vida + CURACION_HOGUERA;
@@ -233,10 +235,10 @@ public class BoneHunting {
 
                 while (enTienda) {
                     System.out.println("\n--- TIENDA --- (Esquirlas: " + esquirlas + ")");
-                    System.out.println("1. Comprar pocion (" + PRECIO_POCION + " esquirlas) - Llevas " + pociones + "/" + MAX_POCIONES);
+                    System.out.println("1. Comprar poción (" + PRECIO_POCION + " esquirlas) - Llevas " + pociones + "/" + MAX_POCIONES);
                     System.out.println("2. Comprar arma");
                     System.out.println("3. Salir de la tienda");
-                    System.out.print("Elige una opcion: ");
+                    System.out.print("Elige una opción: ");
 
                     int opcionTienda;
                     if (teclado.hasNextInt()) {
@@ -248,7 +250,7 @@ public class BoneHunting {
 
                     if (opcionTienda == 1) {
                         if (pociones >= MAX_POCIONES) {
-                            System.out.println("No puedes llevar mas pociones.");
+                            System.out.println("No puedes llevar más pociones.");
                         } else if (esquirlas < PRECIO_POCION) {
                             System.out.println("No tienes esquirlas suficientes.");
                         } else {
@@ -263,7 +265,7 @@ public class BoneHunting {
                             String estado = armasCompradas[i] ? "[COMPRADA]" : preciosArmas[i] + " esquirlas";
                             System.out.println((i + 1) + ". " + armas[i] + " - Daño: " + dañoArmas[i] + " - " + estado);
                         }
-                        System.out.print("Que arma quieres (0 para volver): ");
+                        System.out.print("Qué arma quieres (0 para volver): ");
 
                         int eleccion;
                         if (teclado.hasNextInt()) {
@@ -292,7 +294,7 @@ public class BoneHunting {
                         System.out.println("Sales de la tienda.");
                         enTienda = false;
                     } else {
-                        System.out.println("Opcion incorrecta. Elige un numero del 1 al 3.");
+                        System.out.println("Opción incorrecta. Elige un número del 1 al 3.");
                     }
                 }
 
@@ -305,7 +307,7 @@ public class BoneHunting {
                         System.out.println((i + 1) + ". " + armas[i] + " - Daño: " + dañoArmas[i] + marca);
                     }
                 }
-                System.out.print("Que arma quieres equipar (0 para volver): ");
+                System.out.print("Qué arma quieres equipar (0 para volver): ");
 
                 int eleccion;
                 if (teclado.hasNextInt()) {
@@ -315,6 +317,8 @@ public class BoneHunting {
                     eleccion = -1;
                 }
 
+                // El operador || deja de evaluar cuando encuentra una condición verdadera.
+                // Así no se accede al array si la elección está fuera de sus límites.
                 if (eleccion == 0) {
                     System.out.println("No cambias de arma.");
                 } else if (eleccion < 1 || eleccion > armas.length || !armasCompradas[eleccion - 1]) {
@@ -329,7 +333,7 @@ public class BoneHunting {
                 juegoTerminado = true;
 
             } else {
-                System.out.println("Opcion incorrecta. Elige un numero del 1 al 8.");
+                System.out.println("Opción incorrecta. Elige un número del 1 al 8.");
             }
         }
 
